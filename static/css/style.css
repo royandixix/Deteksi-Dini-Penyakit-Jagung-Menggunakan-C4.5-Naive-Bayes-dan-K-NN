@@ -1,0 +1,41 @@
+body {
+    background: #f6f8f5;
+}
+
+.card {
+    border-radius: 1rem;
+}
+
+.result-image {
+    width: 100%;
+    max-height: 460px;
+    object-fit: cover;
+    background: #e9ecef;
+}
+
+.metric-box {
+    border-radius: 1rem;
+    padding: 1rem;
+    background: #ffffff;
+    box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.06);
+}
+
+.metric-label {
+    font-size: 0.8rem;
+    color: #6c757d;
+    margin-bottom: 0.35rem;
+}
+
+.metric-value {
+    font-size: 1.8rem;
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+.small-value {
+    font-size: 1.2rem;
+}
+
+pre {
+    white-space: pre-wrap;
+}

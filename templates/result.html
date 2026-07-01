@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Hasil Deteksi - Deteksi Penyakit Jagung{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <div class="col-lg-5">
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+            <img src="{{ image_url }}" class="img-fluid result-image" alt="Citra daun jagung">
+            <div class="card-body">
+                <h1 class="h5 fw-bold mb-2">Citra yang Diuji</h1>
+                <p class="text-muted mb-0 small">Gambar diproses dengan ekstraksi fitur warna, tekstur, dan tepi.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-7">
+        <div class="card border-0 shadow-lg rounded-4 mb-4">
+            <div class="card-body p-4">
+                <span class="badge bg-{{ diagnosis.badge }} mb-3">Hasil Utama</span>
+                <h2 class="h3 fw-bold mb-2">{{ diagnosis.title }}</h2>
+                <p class="lead mb-2">Prediksi akhir mengikuti algoritma terbaik: <strong>{{ final_prediction.model_name }}</strong>.</p>
+                <p class="mb-3">{{ diagnosis.description }}</p>
+                <div class="alert alert-light border mb-0">
+                    <strong>Rekomendasi:</strong> {{ diagnosis.recommendation }}
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-header bg-white p-3">
+                <h2 class="h5 fw-bold mb-0">Hasil Prediksi Setiap Algoritma</h2>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-success">
+                            <tr>
+                                <th>Algoritma</th>
+                                <th>Prediksi</th>
+                                <th>Confidence</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in predictions %}
+                                <tr class="{% if item.key == metrics.best_model %}table-light{% endif %}">
+                                    <td class="fw-semibold">
+                                        {{ item.model_name }}
+                                        {% if item.key == metrics.best_model %}
+                                            <span class="badge bg-success ms-1">Terbaik</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ item.prediction_display }}</td>
+                                    <td>
+                                        {% if item.confidence is not none %}
+                                            {{ "%.2f"|format(item.confidence) }}%
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex gap-2 mt-4">
+            <a href="{{ url_for('index') }}" class="btn btn-success">Uji Gambar Lain</a>
+            <a href="{{ url_for('metrics') }}" class="btn btn-outline-success">Lihat Perbandingan</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

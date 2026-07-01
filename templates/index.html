@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Upload Citra - Deteksi Penyakit Jagung{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-9">
+        <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+            <div class="card-header bg-success text-white p-4">
+                <h1 class="h3 fw-bold mb-1">Deteksi Dini Penyakit Tanaman Jagung</h1>
+                <p class="mb-0">Upload citra daun jagung untuk diuji menggunakan C4.5, Naive Bayes, dan K-NN.</p>
+            </div>
+            <div class="card-body p-4 p-md-5">
+                {% if ready %}
+                    <div class="alert alert-success">
+                        Model sudah siap digunakan.
+                        {% if metrics.best_model_name %}
+                            Algoritma terbaik saat training: <strong>{{ metrics.best_model_name }}</strong>.
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-warning">
+                        Model belum tersedia. Masukkan dataset ke folder <code>dataset/</code>, lalu jalankan <code>python train_model.py</code>.
+                    </div>
+                {% endif %}
+
+                <form action="{{ url_for('predict') }}" method="post" enctype="multipart/form-data">
+                    <div class="mb-4">
+                        <label for="image" class="form-label fw-semibold">Pilih gambar daun jagung</label>
+                        <input class="form-control form-control-lg" type="file" id="image" name="image" accept="image/*" required>
+                        <div class="form-text">Format yang didukung: JPG, JPEG, PNG, BMP, WEBP. Maksimal 8 MB.</div>
+                    </div>
+
+                    <div class="d-grid d-md-flex gap-2">
+                        <button type="submit" class="btn btn-success btn-lg px-4">Proses Deteksi</button>
+                        <a href="{{ url_for('metrics') }}" class="btn btn-outline-success btn-lg px-4">Lihat Perbandingan Model</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="row g-3 mt-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm rounded-4">
+                    <div class="card-body">
+                        <h2 class="h6 fw-bold text-success">C4.5</h2>
+                        <p class="small mb-0">Pohon keputusan berbasis entropy untuk klasifikasi fitur citra daun jagung.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm rounded-4">
+                    <div class="card-body">
+                        <h2 class="h6 fw-bold text-success">Naive Bayes</h2>
+                        <p class="small mb-0">Model probabilistik untuk menentukan kelas penyakit berdasarkan distribusi fitur.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm rounded-4">
+                    <div class="card-body">
+                        <h2 class="h6 fw-bold text-success">K-NN</h2>
+                        <p class="small mb-0">Klasifikasi berdasarkan kedekatan fitur gambar uji terhadap data training.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
